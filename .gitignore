@@ -1,3 +1,4 @@
+# Artifacts and local files
 *.pyc
 dist/*
 build/*
@@ -11,3 +12,15 @@ src/quask/optimizer/__pycache__/*
 .ipynb_checkpoints/*
 .vs_code/*
 .vscode/*
+
+# Virtual environment
+.venv
+
+# Ruff
+.ruff_cache
+
+# Tox
+.tox
+
+# PDM
+.pdm-build

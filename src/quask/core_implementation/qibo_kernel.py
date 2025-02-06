@@ -1,5 +1,5 @@
-import numpy as np
-from ..core import Ansatz, Kernel, KernelType
+from ..core import Kernel
+
 
 class QiboKernel(Kernel):
     pass

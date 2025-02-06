@@ -1,41 +1,48 @@
-import numpy as np
-from typing import List
 import itertools
+
+import numpy as np
 
 
 class Operation:
-    """
-    Class representing a 2-qubit rotational quantum gates $exp(-i \theta \sigma_1 \otimes \sigma_2)$
-    """
+    """Class representing a 2-qubit rotational quantum gates $exp(-i \theta \\sigma_1 \\otimes \\sigma_2)$"""
 
-    PAULI_GENERATORS = list(a + b for a, b in itertools.product(["I", "X", "Y", "Z"], repeat=2))
+    PAULI_GENERATORS = list(
+        a + b for a, b in itertools.product(["I", "X", "Y", "Z"], repeat=2)
+    )
     MEASUREMENT_OPERATIONS = ["IM", "MI"]
     OPERATIONS = PAULI_GENERATORS + MEASUREMENT_OPERATIONS
 
-    def __init__(self, generator: str, wires: List[int], feature: int, bandwidth: float):
-        """
-        Operation initializer
+    def __init__(
+        self, generator: str, wires: list[int], feature: int, bandwidth: float
+    ):
+        """Operation initializer
         :param generator: one of the elements of Operation.OPERATIONS
         :param wires: pair of integers
         :param feature: index of the feature parameterizing the element (can be -1 for constant feature '1')
         :param bandwidth: bandwidth parameter in range [0,1]
         """
         self.generator: str = generator
-        self.wires: List[int] = wires
+        self.wires: list[int] = wires
         self.feature: int = feature
         self.bandwidth: float = bandwidth
 
     def to_numpy(self):
-        """
-        Serialize the Operation object to a numpy array format
+        """Serialize the Operation object to a numpy array format
         :return: numpy array representing the operation
         """
-        return np.array([Operation.OPERATIONS.index(self.generator), self.wires[0], self.wires[1], self.feature, self.bandwidth])
+        return np.array(
+            [
+                Operation.OPERATIONS.index(self.generator),
+                self.wires[0],
+                self.wires[1],
+                self.feature,
+                self.bandwidth,
+            ]
+        )
 
     @staticmethod
     def from_numpy(array):
-        """
-        Deserialize the operation object given its numpy array description
+        """Deserialize the operation object given its numpy array description
         :param array: numpy array
         :return: Operation object
         """
