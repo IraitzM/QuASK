@@ -1,7 +1,10 @@
+# Artifacts and local files
 *.pyc
 dist/*
 build/*
+*.egg-info
 docs/build/*
+*/__pycache__/*
 docs/source/notebooks/.ipynb_checkpoints/*
 src/quask/__pycache__/*
 src/quask/core/__pycache__/*
@@ -11,3 +14,19 @@ src/quask/optimizer/__pycache__/*
 .ipynb_checkpoints/*
 .vs_code/*
 .vscode/*
+
+# Virtual environment
+.venv
+
+# Ruff
+.ruff_cache
+
+# Tox
+.tox
+
+# PDM
+.pdm-build
+.pdm-python
+
+# Coverage
+.coverage

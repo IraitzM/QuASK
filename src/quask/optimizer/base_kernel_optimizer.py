@@ -1,18 +1,22 @@
 from abc import ABC, abstractmethod
+
 import numpy as np
-import copy
-from ..core import Operation, Ansatz, Kernel, KernelFactory
+
+from ..core import Kernel
 from ..evaluator import KernelEvaluator
 
 
 class BaseKernelOptimizer(ABC):
-    """
-    Abstract class implementing a procedure to optimize the kernel
-    """
+    """Abstract class implementing a procedure to optimize the kernel"""
 
-    def __init__(self, initial_kernel: Kernel, X: np.ndarray, y: np.ndarray, ke: KernelEvaluator):
-        """
-        Initialization
+    def __init__(
+        self,
+        initial_kernel: Kernel,
+        X: np.ndarray,
+        y: np.ndarray,
+        ke: KernelEvaluator,
+    ):
+        """Initialization
         :param initial_kernel: initial kernel object
         :param X: datapoints
         :param y: labels
@@ -25,8 +29,7 @@ class BaseKernelOptimizer(ABC):
 
     @abstractmethod
     def optimize(self):
-        """
-        Run the optimization
+        """Run the optimization
         :return: optimized kernel object
         """
         pass

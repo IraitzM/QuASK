@@ -1,19 +1,23 @@
 import numpy as np
-from scipy.linalg import sqrtm
+
 from ..core import Kernel
-from . import KernelEvaluator
+from .kernel_evaluator import KernelEvaluator
 
 
 class EssModelComplexityEvaluator(KernelEvaluator):
-    """
-    Calculate the model complexity s(K). 
-    See Equation F1 in "The power of data in quantum machine learning" (https://arxiv.org/abs/2011.01938)
+    """Calculate the model complexity s(K).
+
+    See Equation F1 in "The power of data in quantum machine learning" 
+    (https://arxiv.org/abs/2011.01938)
     """
 
-    def evaluate(self, kernel: Kernel, K: np.ndarray, X: np.ndarray, y: np.ndarray):
-        """
-        Evaluate the current kernel and return the corresponding cost. Lower cost values corresponds to better solutions
-        
+    def evaluate(
+        self, kernel: Kernel, K: np.ndarray, X: np.ndarray, y: np.ndarray
+    ):
+        r"""Evaluate the current kernel and return the corresponding cost.
+
+        Lower cost values corresponds to better solutions
+
         :param kernel: kernel object
         :param K: optional kernel matrix \kappa(X, X)
         :param X: datapoints
@@ -27,9 +31,10 @@ class EssModelComplexityEvaluator(KernelEvaluator):
 
     @staticmethod
     def calculate_model_complexity(k, y, normalization_lambda=0.001):
-        """
-        Calculate the model complexity s(K), which is equation F1 in
-        "The power of data in quantum machine learning" (https://arxiv.org/abs/2011.01938).
+        """Calculate the model complexity s(K), which is equation F1 in.
+
+        "The power of data in quantum machine learning"
+        (https://arxiv.org/abs/2011.01938).
 
         :param k: Kernel gram matrix
         :param y: Labels
@@ -44,8 +49,7 @@ class EssModelComplexityEvaluator(KernelEvaluator):
 
     @staticmethod
     def calculate_model_complexity_training(k, y, normalization_lambda=0.001):
-        """
-        Subprocedure of the function 'calculate_model_complexity_generalized'.
+        """Subprocedure of the function 'calculate_model_complexity_generalized'.
 
         :param k: Kernel gram matrix
         :param y: Labels
@@ -54,15 +58,19 @@ class EssModelComplexityEvaluator(KernelEvaluator):
         """
         n = k.shape[0]
         k_inv = np.linalg.inv(k + normalization_lambda * np.eye(n))
-        k_mid = k_inv @ k_inv # without k in the middle
+        k_mid = k_inv @ k_inv  # without k in the middle
         model_complexity = (normalization_lambda**2) * (y.T @ k_mid @ y)
         return model_complexity
 
     @staticmethod
-    def calculate_model_complexity_generalized(k, y, normalization_lambda=0.001):
-        """
+    def calculate_model_complexity_generalized(
+        k, y, normalization_lambda=0.001
+    ):
+        """Complexity calculation.
+
         Calculate the model complexity s(K), which is equation M1 in
-        "The power of data in quantum machine learning" (https://arxiv.org/abs/2011.01938).
+        "The power of data in quantum machine learning"
+        (https://arxiv.org/abs/2011.01938).
 
         :param k: Kernel gram matrix
         :param y: Labels
@@ -70,6 +78,16 @@ class EssModelComplexityEvaluator(KernelEvaluator):
         :return: model complexity of the given kernel
         """
         n = k.shape[0]
-        a = np.sqrt(EssModelComplexityEvaluator.calculate_model_complexity_training(k, y, normalization_lambda) / n)
-        b = np.sqrt(EssModelComplexityEvaluator.calculate_model_complexity(k, y, normalization_lambda) / n)
+        a = np.sqrt(
+            EssModelComplexityEvaluator.calculate_model_complexity_training(
+                k, y, normalization_lambda
+            )
+            / n
+        )
+        b = np.sqrt(
+            EssModelComplexityEvaluator.calculate_model_complexity(
+                k, y, normalization_lambda
+            )
+            / n
+        )
         return a + b

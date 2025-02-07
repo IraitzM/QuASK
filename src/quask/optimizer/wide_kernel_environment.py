@@ -1,22 +1,26 @@
 import numpy as np
 from mushroom_rl.core import Environment, MDPInfo
 from mushroom_rl.utils.spaces import Discrete
-from ..core import Operation, Ansatz, Kernel, KernelFactory
+
+from ..core import Kernel
 from ..evaluator import KernelEvaluator
 
 
 class WideKernelEnvironment(Environment):
-    """
-    Implementation of a Mushroom-RL Environment for our problem
-    """
+    """Implementation of a Mushroom-RL Environment for our problem"""
 
     @staticmethod
     def setup():
         WideKernelEnvironment.register()
 
-    def __init__(self, initial_kernel: Kernel, X: np.ndarray, y: np.ndarray, ke: KernelEvaluator):
-        """
-        Initialization
+    def __init__(
+        self,
+        initial_kernel: Kernel,
+        X: np.ndarray,
+        y: np.ndarray,
+        ke: KernelEvaluator,
+    ):
+        """Initialization
         :param initial_kernel: initial kernel object
         :param X: datapoints
         :param y: labels
@@ -26,7 +30,9 @@ class WideKernelEnvironment(Environment):
         self.n_operations = self.initial_kernel.ansatz.n_operations
         self.n_features = self.initial_kernel.ansatz.n_features
         self.n_qubits = self.initial_kernel.ansatz.n_qubits
-        self.allow_midcircuit_measurement = self.initial_kernel.ansatz.allow_midcircuit_measurement
+        self.allow_midcircuit_measurement = (
+            self.initial_kernel.ansatz.allow_midcircuit_measurement
+        )
         self.X = X
         self.y = y
         self.ke = ke
@@ -50,7 +56,9 @@ class WideKernelEnvironment(Environment):
         )
 
         # Create the MDPInfo structure, needed by the environment interface
-        mdp_info = MDPInfo(observation_space, action_space, gamma=0.99, horizon=100)
+        mdp_info = MDPInfo(
+            observation_space, action_space, gamma=0.99, horizon=100
+        )
         super().__init__(mdp_info)
 
         # Create a state class variable to store the current state
@@ -60,36 +68,41 @@ class WideKernelEnvironment(Environment):
         self._viewer = None
 
     def serialize_state(self, n_operation, kernel):
-        """
-        Pack the state of the optimization technique
+        """Pack the state of the optimization technique
         :param n_operation: number of operations currently performed
         :param kernel: kernel object
         :return: serialized state
         """
-        state = np.concatenate([np.array([n_operation], dtype=int), kernel.to_numpy()], dtype=object).ravel()
+        state = np.concatenate(
+            [np.array([n_operation], dtype=int), kernel.to_numpy()],
+            dtype=object,
+        ).ravel()
         return state.astype(int)
 
     def deserialize_state(self, array):
-        """
-        Deserialized a previously packed state variable
+        """Deserialized a previously packed state variable
         :param array: serialized state
         :return: tuple n_operations, kernel object
         """
-        kernel = Kernel.from_numpy(array[1:], self.n_features, self.n_qubits, self.n_operations, self.allow_midcircuit_measurement)
+        kernel = Kernel.from_numpy(
+            array[1:],
+            self.n_features,
+            self.n_qubits,
+            self.n_operations,
+            self.allow_midcircuit_measurement,
+        )
         n_operations = int(array[0])
         return n_operations, kernel
 
     def render(self):
-        """
-        Rendering function - we don't need that
+        """Rendering function - we don't need that
         :return: None
         """
         n_op, kernel = self.deserialize_state(self._state)
         print(f"{self.last_reward=:2.4f} {n_op=:2d} {kernel=}")
 
     def reset(self, state=None):
-        """
-        Reset the state
+        """Reset the state
         :param state: optional state
         :return: self._state variable
         """
@@ -101,12 +114,13 @@ class WideKernelEnvironment(Environment):
         return self._state
 
     def unpack_action(self, action):
-        """
-        Unpack an action to a operation
+        """Unpack an action to a operation
         :param action: integer representing the action
         :return: dictionary of the operation
         """
-        generator_index = int(action % len(self.initial_kernel.get_allowed_operations()))
+        generator_index = int(
+            action % len(self.initial_kernel.get_allowed_operations())
+        )
         action = action // len(self.initial_kernel.get_allowed_operations())
 
         wires_0 = int(action % self.n_qubits)
@@ -121,20 +135,29 @@ class WideKernelEnvironment(Environment):
         action = action // (self.n_features + 1)
         assert action == 0
 
-        return {'generator': self.initial_kernel.get_allowed_operations()[generator_index],
-                'wires': [wires_0, wires_1],
-                'feature': feature,
-                'bandwidth': 1.0}
+        return {
+            "generator": self.initial_kernel.get_allowed_operations()[
+                generator_index
+            ],
+            "wires": [wires_0, wires_1],
+            "feature": feature,
+            "bandwidth": 1.0,
+        }
 
     def step(self, action):
-
         the_action = self.unpack_action(action[0])
 
         # Create kernel from state
         n_operations, kernel = self.deserialize_state(self._state)
 
         # Update kernel
-        kernel.ansatz.change_operation(n_operations, the_action['feature'], the_action['wires'], the_action['generator'], the_action['bandwidth'])
+        kernel.ansatz.change_operation(
+            n_operations,
+            the_action["feature"],
+            the_action["wires"],
+            the_action["generator"],
+            the_action["bandwidth"],
+        )
         n_operations += 1
 
         # Update state
@@ -149,5 +172,3 @@ class WideKernelEnvironment(Environment):
 
         # Return all the information + empty dictionary (used to pass additional information)
         return self._state, reward, absorbing, {}
-
-

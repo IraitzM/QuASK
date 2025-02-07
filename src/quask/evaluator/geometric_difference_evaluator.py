@@ -1,32 +1,36 @@
 import numpy as np
 from scipy.linalg import sqrtm
+
 from ..core import Kernel
-from . import KernelEvaluator
+from .kernel_evaluator import KernelEvaluator
 
 
 class GeometricDifferenceEvaluator(KernelEvaluator):
-    """
-    Calculate the geometric difference g(K_1 || K_2), and characterize 
-    the separation between classical and quantum kernels.    
-    See Equation F9 in "The power of data in quantum machine learning" (https://arxiv.org/abs/2011.01938)
+    """Calculate the geometric difference g(K_1 || K_2).
+    
+    Characterize the separation between classical and quantum kernels.
+    See Equation F9 in "The power of data in quantum machine learning" 
+    (https://arxiv.org/abs/2011.01938)
     """
 
     def __init__(self, list_classical_kernel_matrices, lam):
-        """
-        Initialization. 
+        """Initialization.
 
-        :param list_classical_kernel_matrices: List of kernel matrices obtained with classical kernels
+        :param list_classical_kernel_matrices: List of kernel matrices obtained
+            with classical kernels
         :param lam: normalization constant lambda
         """
         super().__init__()
         self.list_classical_kernel_matrices = list_classical_kernel_matrices
         self.lam = lam
 
+    def evaluate(
+        self, kernel: Kernel, K: np.ndarray, X: np.ndarray, y: np.ndarray
+    ):
+        r"""Evaluate the current kernel and return the corresponding cost.
 
-    def evaluate(self, kernel: Kernel, K: np.ndarray, X: np.ndarray, y: np.ndarray):
-        """
-        Evaluate the current kernel and return the corresponding cost. Lower cost values corresponds to better solutions
-        
+        Lower cost values corresponds to better solutions
+
         :param kernel: kernel object
         :param K: optional kernel matrix \kappa(X, X)
         :param X: datapoints
@@ -36,16 +40,17 @@ class GeometricDifferenceEvaluator(KernelEvaluator):
         if K is None:
             K = kernel.build_kernel(X, X)
 
-        geometric_differences = [GeometricDifferenceEvaluator.g(K, Kc, self.lam) 
-                                 for Kc in self.list_classical_kernel_matrices]
+        geometric_differences = [
+            GeometricDifferenceEvaluator.g(K, Kc, self.lam)
+            for Kc in self.list_classical_kernel_matrices
+        ]
 
         # return -1 * np.min(geometric_differences)
         return geometric_differences
 
     @staticmethod
     def g(k_1, k_2, lam):
-        """
-        Method to calculate the geometric difference
+        """Method to calculate the geometric difference.
 
         :param k_1: first matrix (quantum usually)
         :param k_2: second matrix (classical usually)
@@ -63,6 +68,8 @@ class GeometricDifferenceEvaluator(KernelEvaluator):
         kc_inv = np.linalg.inv(k_2 + lam * np.eye(n))
         kc_inv = kc_inv @ kc_inv
         # Equation F9
-        f9_body = k_1_sqrt.dot(k_2_sqrt.dot(kc_inv.dot(k_2_sqrt.dot(k_1_sqrt))))
+        f9_body = k_1_sqrt.dot(
+            k_2_sqrt.dot(kc_inv.dot(k_2_sqrt.dot(k_1_sqrt)))
+        )
         f9 = np.sqrt(np.linalg.norm(f9_body, np.inf))
         return f9

@@ -1,3 +1,6 @@
+[![SQAaaS badge shields.io](https://github.com/EOSC-synergy/quask.assess.sqaaas/raw/master/.badge/status_shields.svg)](https://sqaaas.eosc-synergy.eu/#/full-assessment/report/https://raw.githubusercontent.com/eosc-synergy/quask.assess.sqaaas/master/.report/assessment_output.json)
+
+
 # Quantum Advantage Seeker with Kernels (QuASK)
 
 QuASK is an actively maintained library for constructing, studying, and benchmarking quantum kernel methods.
@@ -6,12 +9,11 @@ It is designed to simplify the process of choosing a quantum kernel, automate th
 
 QuASK promotes the use of reusable code and is available as a library that can be seamlessly integrated into existing code bases. It is written in Python 3, can be easily installed using pip, and is accessible on PyPI.
 
-
 *Homepage*: [quask.web.cern.ch](https://quask.web.cern.ch/)
 
 *Documentation*: [quask.readthedocs.io](https://quask.readthedocs.io/en/latest/)
 
-## Installation 
+## Installation
 
 The easiest way to use *quask* is by installing it in your Python3
 environment (version >= 3.10) via the *pip* packet manager,
@@ -24,23 +26,23 @@ You also need any quantum SDK installed on your system. For example, we can inst
     python3 -m pip install qiskit_ibm_runtime --upgrade
     python3 -m pip install qiskit-aer
 
-See the [Installation section](https://quask.readthedocs.io/en/latest/installation.html) 
+See the [Installation section](https://quask.readthedocs.io/en/latest/installation.html)
 of our documentation page for more information.
 
 ## Examples
 
 The fastest way to start developing using _quask_ is via our [Getting started](https://quask.readthedocs.io/en/latest/getting_started.html) guide.
 
-If you are not familiar with the concept of kernel methods in classical machine learning, we have developed a [series of introductory tutorials](https://quask.readthedocs.io/en/latest/tutorials_classical/index.html) on the topic. 
+If you are not familiar with the concept of kernel methods in classical machine learning, we have developed a [series of introductory tutorials](https://quask.readthedocs.io/en/latest/tutorials_classical/index.html) on the topic.
 
-If you are not familiar with the concept of quantum kernels, we have developed a [series of introductory tutorials](https://quask.readthedocs.io/en/latest/tutorials_quantum/index.html) on the topic, which is also used to showcase the basic functionalities of _quask_. 
+If you are not familiar with the concept of quantum kernels, we have developed a [series of introductory tutorials](https://quask.readthedocs.io/en/latest/tutorials_quantum/index.html) on the topic, which is also used to showcase the basic functionalities of _quask_.
 
 Then [advanced features of _quask_](https://quask.readthedocs.io/en/latest/tutorials_quask/index.html) are shown, including the use of different backends, the criteria to evaluate a quantum kernel, and the automatic optimization approach.
 
-Finally, [look here for some applications](https://quask.readthedocs.io/en/latest/tutorials_applications/index.html). 
+Finally, [look here for some applications](https://quask.readthedocs.io/en/latest/tutorials_applications/index.html).
 
 
-## Source 
+## Source
 
 
 ### Deployment to PyPI
@@ -49,7 +51,7 @@ The software is uploaded to [PyPI](https://pypi.org/project/quask/).
 
 ### Test
 
-The suite of test for _quask_ is currently under development.To run the available tests, type 
+The suite of test for _quask_ is currently under development.To run the available tests, type
 
     pytest
 
@@ -58,7 +60,7 @@ You can also specify specific test scripts.
 
     pytest tests/test_example.py
 
- _quask_ has been developed and tested with the following versions of the quantum frameworks: 
+ _quask_ has been developed and tested with the following versions of the quantum frameworks:
 
 * PennyLane==0.32.0
 * PennyLane-Lightning==0.32.0
@@ -67,9 +69,9 @@ You can also specify specific test scripts.
 * qiskit-ibm-runtime==0.14.0
 
 
-## Documentation 
+## Documentation
 
-The documentation is available at our [Read the Docs](https://quask.readthedocs.io/en/latest/) domain. 
+The documentation is available at our [Read the Docs](https://quask.readthedocs.io/en/latest/) domain.
 
 ### Generate the documentation
 
@@ -93,7 +95,7 @@ The Sphinx configuration file (`conf.py`) has the following, non-standard option
 
 ### Generate the UML diagrams
 
-Currently, the pages generated from the Python notebooks has to be compiled to RST format manually. We could use in the future the [nbsphinx extension](https://docs.readthedocs.io/en/stable/guides/jupyter.html) to automatize this process. This has the advantage that the documentation is always up to date, the disadvantage is that the process is much slower. 
+Currently, the pages generated from the Python notebooks has to be compiled to RST format manually. We could use in the future the [nbsphinx extension](https://docs.readthedocs.io/en/stable/guides/jupyter.html) to automatize this process. This has the advantage that the documentation is always up to date, the disadvantage is that the process is much slower.
 
 ### Generate the UML diagrams
 
@@ -102,7 +104,7 @@ The UML diagrams in the [Platform overview](https://quask.readthedocs.io/en/late
     sudo apt-get install graphviz
     python3 -m pip install pylint
 
-The UML diagrams are created via: 
+The UML diagrams are created via:
 
     cd src/quask
     pyreverse -o png -p QUASK .
@@ -110,7 +112,7 @@ The UML diagrams are created via:
 
 ## Acknowledgements
 
-The platform has been developed with the contribution of [Massimiliano Incudini](https://incud.github.io), Francesco Di Marcantonio, Davide Tezza, Roman Wixinger, Sofia Vallecorsa, and [Michele Grossi](https://scholar.google.com/citations?user=cnfcO7cAAAAJ&hl=en). 
+The platform has been developed with the contribution of [Massimiliano Incudini](https://incud.github.io), Francesco Di Marcantonio, Davide Tezza, Roman Wixinger, Sofia Vallecorsa, and [Michele Grossi](https://scholar.google.com/citations?user=cnfcO7cAAAAJ&hl=en).
 
 If you have used _quask_ for your project, please consider citing us.
 
