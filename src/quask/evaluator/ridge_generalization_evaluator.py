@@ -2,20 +2,19 @@ import numpy as np
 from sklearn.kernel_ridge import KernelRidge
 
 from ..core import Kernel
-from . import KernelEvaluator
+from .kernel_evaluator import KernelEvaluator
 
 
 class RidgeGeneralizationEvaluator(KernelEvaluator):
-    """Evaluates the generalization error of the given kernel"""
-
-    def __init__(self):
-        """Initialization"""
-        pass
+    """Evaluates the generalization error of the given kernel."""
 
     def evaluate(
         self, kernel: Kernel, K: np.ndarray, X: np.ndarray, y: np.ndarray
     ):
-        r"""Evaluate the current kernel and return the corresponding cost. Lower cost values corresponds to better solutions
+        r"""Evaluate the current kernel and return the corresponding cost.
+
+        Lower cost values corresponds to better solutions.
+
         :param kernel: kernel object
         :param K: optional kernel matrix \kappa(X, X)
         :param X: datapoints

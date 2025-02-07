@@ -2,7 +2,9 @@
 *.pyc
 dist/*
 build/*
+*.egg-info
 docs/build/*
+*/__pycache__/*
 docs/source/notebooks/.ipynb_checkpoints/*
 src/quask/__pycache__/*
 src/quask/core/__pycache__/*
@@ -24,6 +26,7 @@ src/quask/optimizer/__pycache__/*
 
 # PDM
 .pdm-build
+.pdm-python
 
 # Coverage
 .coverage

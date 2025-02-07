@@ -1,18 +1,22 @@
 import numpy as np
 
 from ..core import Kernel
-from . import KernelEvaluator
+from .kernel_evaluator import KernelEvaluator
 
 
 class EssModelComplexityEvaluator(KernelEvaluator):
     """Calculate the model complexity s(K).
-    See Equation F1 in "The power of data in quantum machine learning" (https://arxiv.org/abs/2011.01938)
+
+    See Equation F1 in "The power of data in quantum machine learning" 
+    (https://arxiv.org/abs/2011.01938)
     """
 
     def evaluate(
         self, kernel: Kernel, K: np.ndarray, X: np.ndarray, y: np.ndarray
     ):
-        r"""Evaluate the current kernel and return the corresponding cost. Lower cost values corresponds to better solutions
+        r"""Evaluate the current kernel and return the corresponding cost.
+
+        Lower cost values corresponds to better solutions
 
         :param kernel: kernel object
         :param K: optional kernel matrix \kappa(X, X)
@@ -27,8 +31,10 @@ class EssModelComplexityEvaluator(KernelEvaluator):
 
     @staticmethod
     def calculate_model_complexity(k, y, normalization_lambda=0.001):
-        """Calculate the model complexity s(K), which is equation F1 in
-        "The power of data in quantum machine learning" (https://arxiv.org/abs/2011.01938).
+        """Calculate the model complexity s(K), which is equation F1 in.
+
+        "The power of data in quantum machine learning"
+        (https://arxiv.org/abs/2011.01938).
 
         :param k: Kernel gram matrix
         :param y: Labels
@@ -60,8 +66,11 @@ class EssModelComplexityEvaluator(KernelEvaluator):
     def calculate_model_complexity_generalized(
         k, y, normalization_lambda=0.001
     ):
-        """Calculate the model complexity s(K), which is equation M1 in
-        "The power of data in quantum machine learning" (https://arxiv.org/abs/2011.01938).
+        """Complexity calculation.
+
+        Calculate the model complexity s(K), which is equation M1 in
+        "The power of data in quantum machine learning"
+        (https://arxiv.org/abs/2011.01938).
 
         :param k: Kernel gram matrix
         :param y: Labels

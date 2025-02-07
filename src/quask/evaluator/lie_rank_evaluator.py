@@ -3,18 +3,23 @@ import copy
 import numpy as np
 
 from ..core import Kernel
-from . import KernelEvaluator
+from .kernel_evaluator import KernelEvaluator
 
 
 class LieRankEvaluator(KernelEvaluator):
-    """Expressibility and 'Efficient classical simulability' measure based on the rank of the Lie algebra obtained by spanning
+    """Expressibility and 'Efficient classical simulability'.
+
+    Measure based on the rank of the Lie algebra obtained by spanning
     the generators of the circuits.
-    See: Larocca, Martin, et al. "Diagnosing barren plateaus with tools from quantum optimal control." Quantum 6 (2022): 824.
+    See: Larocca, Martin, et al. "Diagnosing barren plateaus with tools 
+    from quantum optimal control." Quantum 6 (2022): 824.
     """
 
     def __init__(self, T):
-        """Initializer
-        :param T: threshold T > 0 telling how is the minimum dimension of a 'hard-to-simulate' Lie algebra
+        """Initializer.
+
+        :param T: threshold T > 0 telling how is the minimum dimension of 
+            a 'hard-to-simulate' Lie algebra
         """
         super().__init__()
         self.T = T
@@ -22,7 +27,10 @@ class LieRankEvaluator(KernelEvaluator):
     def evaluate(
         self, kernel: Kernel, K: np.ndarray, X: np.ndarray, y: np.ndarray
     ):
-        r"""Evaluate the current kernel and return the corresponding cost. Lower cost values corresponds to better solutions
+        r"""Evaluate the current kernel and return the corresponding cost.
+        
+        Lower cost values corresponds to better solutions.
+
         :param kernel: kernel object
         :param K: optional kernel matrix \kappa(X, X)
         :param X: datapoints
@@ -33,7 +41,8 @@ class LieRankEvaluator(KernelEvaluator):
         return -len(self.last_result)
 
     def braket_pair(self, a: str, b: str):
-        """Calculate the commutator between two pauli matrices
+        """Calculate the commutator between two pauli matrices.
+
         :param a: first Pauli (one of the strings 'I', 'X', 'Y', 'Z')
         :param b: second Pauli (one of the strings 'I', 'X', 'Y', 'Z')
         :return: [a, b]
@@ -48,7 +57,8 @@ class LieRankEvaluator(KernelEvaluator):
         return list({"X", "Y", "Z"}.difference([a, b]))[0]
 
     def braket_strings(self, s1: str, s2: str):
-        """Calculate the communtator between two pauli strings
+        """Calculate the communtator between two pauli strings.
+
         :param s1: first Pauli string
         :param s2: second Pauli string
         :return: [s1, s2]
@@ -59,7 +69,8 @@ class LieRankEvaluator(KernelEvaluator):
     def __braket_generators(
         self, initial_generators: set[str], new_generators: set[str]
     ):
-        """Return the set of generators obtained by commutating pairwise the elements in the given set
+        """Return the set of generators obtained by commutating pairwise the elements in the given set.
+        
         :param initial_generators: first set of generators
         :param new_generators: second set of generators
         :return: generators obtained with the pairwise commutation of the given elements (only new ones)
@@ -125,3 +136,4 @@ class LieRankEvaluator(KernelEvaluator):
 
     def __str__(self):
         return str(self.last_result)
+

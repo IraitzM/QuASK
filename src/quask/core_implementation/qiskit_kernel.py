@@ -30,9 +30,9 @@ class QiskitKernel(Kernel):
         platform: str = "finite_shots",
         backend: IBMBackend = None,
         n_shots: int = 2048,
-        options: dict = None,
+        options: dict | None = None,
         optimization_level: int = 2,
-        layout: list = None,
+        layout: list | None = None,
     ):
         """Initialization.
 
@@ -60,7 +60,7 @@ class QiskitKernel(Kernel):
         channel: str,
         ibm_token: str,
         group_instance: str,
-        device: str = None,
+        device: str | None = None,
     ):
         service = QiskitRuntimeService(
             channel=channel, token=ibm_token, instance=group_instance
@@ -115,34 +115,56 @@ class QiskitKernel(Kernel):
         return estimator_options
 
     def get_sampler(self):
+        """Get sampler.
+
+        Returns:
+            Sampler: Qiskit sampler.
+        """
         if self.platform == "infty_shots":
             return Statevector
 
         elif self.platform == "finite_shots":
             return StatevectorSampler(default_shots=self.n_shots)
+
         elif self.platform == "ibm_quantum":
             options = self.get_sampler_options()
             return IBMSampler(backend=self.backend, options=options)
 
     def get_estimator(self):
+        """Get Estimator.
+
+        Returns:
+            Estimator: Qiskit Estimator.
+        """
         if self.platform == "infty_shots":
             return StatevectorEstimator
+
         elif self.platform == "ibm_quantum":
             options = self.get_estimator_options()
             return IBMEstimator(backend=self.backend, options=options)
 
     def get_running_method(self, qc: QuantumCircuit):
+        """Running the circuit to obtain its outcome.
+
+        Args:
+            qc (QuantumCircuit): Circuit to be executed
+
+        Returns:
+            _type_: _description_
+        """
         sampler = self.get_sampler()
         if self.platform == "infty_shots":
-            res = Statevector.from_instruction(qc).data[0].real
+            return Statevector.from_instruction(qc).data[0].real
+
         elif self.platform == "finite_shots":
             qc.measure_all()
-            counts = sampler.run([qc]).result()[0].data.meas.get_int_counts()
+            counts = sampler.run([qc]).result()[0].data.meas.get_counts()
             dist = QuasiDistribution(
                 {meas: count / self.n_shots for meas, count in counts.items()},
                 shots=self.n_shots,
             )
-            res = dist.get(0, 0.0)
+            return dist.get(0, 0.0)
+
         elif self.platform == "ibm_quantum":
             qc.measure_all()
             logical_circuit = qc
@@ -154,9 +176,8 @@ class QiskitKernel(Kernel):
             physical_circuit = pm.run(logical_circuit)
             job = sampler.run([physical_circuit])
             print(f"Job sent to hardware. Job ID: {job.job_id()}")
-            res = job
 
-        return res
+            return job
 
     def get_job_results(self, job: RuntimeJobV2):
         counts = job.result()[0].data.meas.get_int_counts()
@@ -205,13 +226,13 @@ class QiskitKernel(Kernel):
             qc.h(0)
             qc.append(
                 self.get_qiskit_ansatz().assign_parameters(
-                    x1.tolist() + [1.0]
+                    [*x1.tolist(), 1.0]
                 ),
                 range(1, 1 + self.ansatz.n_qubits),
             )
             qc.append(
                 self.get_qiskit_ansatz().assign_parameters(
-                    x2.tolist() + [1.0]
+                    [*x2.tolist(), 1.0]
                 ),
                 range(self.ansatz.n_qubits),
             )
@@ -226,7 +247,7 @@ class QiskitKernel(Kernel):
     def phi(self, x: np.ndarray) -> float:
         if self.type == KernelType.OBSERVABLE:
             assert len(x) == self.ansatz.n_features
-            complete_features = x.tolist() + [1.0]
+            complete_features = [*x.tolist(), 1.0]
             circuit = self.get_qiskit_ansatz().bind_parameters(
                 complete_features
             )

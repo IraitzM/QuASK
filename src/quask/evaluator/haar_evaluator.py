@@ -1,28 +1,40 @@
 import numpy as np
 
 from ..core import Kernel
-from . import KernelEvaluator
+from .kernel_evaluator import KernelEvaluator
 
 
 class HaarEvaluator(KernelEvaluator):
-    """Expressibility measure based on the comparison between the distribution of states obtained with an Haar random circuit and
+    """Haar evaluator.
+    
+    Expressibility measure based on the comparison between 
+    the distribution of states obtained with an Haar random circuit and
     the one obtained with the current ansatz.
-    See: Sim, Sukin, Peter D. Johnson, and Alán Aspuru-Guzik. "Expressibility and entangling capability of parameterized quantum
-    circuits for hybrid quantum-classical algorithms." Advanced Quantum Technologies 2.12 (2019): 1900070.
+
+    See: Sim, Sukin, Peter D. Johnson, and Alán Aspuru-Guzik. 
+    "Expressibility and entangling capability of parameterized quantum
+    circuits for hybrid quantum-classical algorithms." 
+    Advanced Quantum Technologies 2.12 (2019): 1900070.
     """
 
     def __init__(self, n_bins: int, n_samples: int):
-        """Initialization
+        """Initialization.
+
         :param n_bins: number of discretization buckets
-        :param n_samples: number of samples approximating the distribution of values
+        :param n_samples: number of samples approximating the distribution
+            of values
         """
+        super().__init__()
+
         self.n_bins = n_bins
         self.n_samples = n_samples
 
     def evaluate(
         self, kernel: Kernel, K: np.ndarray, X: np.ndarray, y: np.ndarray
     ):
-        r"""Evaluate the current kernel and return the corresponding cost. Lower cost values corresponds to better solutions
+        r"""Evaluate the current kernel and return the corresponding cost.
+
+        Lower cost values corresponds to better solutions
         :param kernel: kernel object
         :param K: optional kernel matrix \kappa(X, X)
         :param X: datapoints
@@ -38,7 +50,8 @@ class HaarEvaluator(KernelEvaluator):
 
     @staticmethod
     def ansatz_histogram(kernel, n_bins, n_samples, K: None):
-        """Create a histogram of the fidelities of the ansatz
+        """Create a histogram of the fidelities of the ansatz.
+
         :param kernel: kernel object
         :param n_bins: number of discretization buckets
         :param n_samples: number of samples approximating the distribution of values
@@ -67,7 +80,8 @@ class HaarEvaluator(KernelEvaluator):
 
     @staticmethod
     def haar_histogram(kernel, n_bins):
-        """Create a histogram of the Haar random fidelities
+        """Create a histogram of the Haar random fidelities.
+
         :param n_bins: number of bins
         :return: histogram
         """

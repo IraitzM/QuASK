@@ -62,13 +62,13 @@ class Kernel(ABC):
         return self.ansatz.get_allowed_operations()
 
     def build_kernel(
-        self, x1: np.ndarray, x2: np.ndarray, matrix: str | None = None
+        self, x1: np.ndarray, x2: np.ndarray, matrix: str = "train"
     ) -> np.ndarray:
         """Build a kernel.
 
         :param X1: a single datapoint or a list of datapoints
         :param X2: a single datapoint or a list of datapoints
-        :param matrix: training or testing matrix
+        :param matrix: training or testing matrix. Default to train
         :return: a single or a matrix of kernel inner products
         """
         # if you gave me only one sample

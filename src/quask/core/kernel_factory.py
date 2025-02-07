@@ -2,11 +2,12 @@ from .ansatz import Ansatz
 from .kernel_type import KernelType
 
 class KernelFactory:
-    """Instantiate the concrete object from classes that inherit from (abstract class) Kernel.
-    Implement the self-registering factory pattern
+    """Kernel factory.
+
+    Instantiate the concrete object from classes
+    that inherit from (abstract class) Kernel.
     """
 
-    # to see the implementations and the current_implementation you can call it in this way: ._KernelFactory__implementations, ._KernelFactory__current_implementation
     __implementations = {}
     """Dictionary containing pairs (name, function to create the kernel)."""
 
@@ -15,7 +16,10 @@ class KernelFactory:
 
     @staticmethod
     def add_implementation(name, fn):
-        """Add the current closure function as one of the possible implementations available
+        """Adds implementation.
+        
+        Add the current closure function as one of the
+        possible implementations available.
 
         :param name: name of the implementation
         :param fn: function that creates the quantum kernel
@@ -43,15 +47,15 @@ class KernelFactory:
         KernelFactory.__current_implementation = name
 
     @staticmethod
-    def create_kernel(ansatz: Ansatz, measurement: str, type: KernelType):
+    def create_kernel(ansatz: Ansatz, measurement: str, ktype: KernelType):
         """Create a kernel object using the default class chosen.
 
         :param ansatz: Ansatz object representing the unitary transformation
         :param measurement: Pauli string representing the measurement
-        :param type: type of kernel, fidelity, swap test or observable
+        :param ktype: type of kernel, fidelity, swap test or observable
         :return: kernel object of the default concrete class
         """
         fn = KernelFactory.__implementations[
             KernelFactory.__current_implementation
         ]
-        return fn(ansatz, measurement, type)
+        return fn(ansatz, measurement, ktype)

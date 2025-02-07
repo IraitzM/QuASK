@@ -1,9 +1,6 @@
-from .centered_kernel_alignment_evaluator import (
-    CenteredKernelAlignmentEvaluator as CenteredKernelAlignmentEvaluator,
-)
-from .covering_number_evaluator import (
-    CoveringNumberEvaluator as CoveringNumberEvaluator,
-)
+from .centered_kernel_alignment_evaluator import CenteredKernelAlignmentEvaluator 
+from .covering_number_evaluator import CoveringNumberEvaluator
+
 from .ess_model_complexity_evaluator import (
     EssModelComplexityEvaluator as EssModelComplexityEvaluator,
 )

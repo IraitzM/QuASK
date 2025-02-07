@@ -1,3 +1,6 @@
+[![SQAaaS badge shields.io](https://github.com/EOSC-synergy/quask.assess.sqaaas/raw/master/.badge/status_shields.svg)](https://sqaaas.eosc-synergy.eu/#/full-assessment/report/https://raw.githubusercontent.com/eosc-synergy/quask.assess.sqaaas/master/.report/assessment_output.json)
+
+
 # Quantum Advantage Seeker with Kernels (QuASK)
 
 QuASK is an actively maintained library for constructing, studying, and benchmarking quantum kernel methods.
