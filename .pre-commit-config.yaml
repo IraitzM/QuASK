@@ -31,4 +31,5 @@ repos:
     # uv version.
     rev: 0.5.24
     hooks:
-      - id: uv-export --no-hashes -o requirements.txt
+      - id: uv-export
+        args: ["--no-hashes", "--output-file=requirements.txt"]
