@@ -4,7 +4,9 @@ import numpy as np
 
 
 class Operation:
-    """Class representing a 2-qubit rotational quantum gates $exp(-i \theta \\sigma_1 \\otimes \\sigma_2)$"""
+    """Class representing a 2-qubit rotational quantum gates 
+    $exp(-i \theta \\sigma_1 \\otimes \\sigma_2)$.
+    """
 
     PAULI_GENERATORS = list(
         a + b for a, b in itertools.product(["I", "X", "Y", "Z"], repeat=2)

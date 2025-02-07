@@ -1,5 +1,5 @@
-from . import Ansatz, KernelType
-
+from .ansatz import Ansatz
+from .kernel_type import KernelType
 
 class KernelFactory:
     """Instantiate the concrete object from classes that inherit from (abstract class) Kernel.

@@ -2,11 +2,13 @@ from abc import ABC, abstractmethod
 
 import numpy as np
 
-from . import Ansatz, KernelFactory, KernelType
+from .ansatz import Ansatz
+from .kernel_factory import KernelFactory
+from .kernel_type import KernelType
 
 
 class Kernel(ABC):
-    """Abstract class representing a kernel object"""
+    """Abstract class representing a kernel object."""
 
     PAULIS = ["I", "X", "Y", "Z"]
 
@@ -43,7 +45,6 @@ class Kernel(ABC):
         :param x2: second data point
         :return: Kernel similarity between the two data points
         """
-        pass
 
     @abstractmethod
     def phi(self, x) -> float:
@@ -52,7 +53,6 @@ class Kernel(ABC):
         :param x: data point
         :return: feature map of the datapoint as numpy array
         """
-        pass
 
     def get_allowed_operations(self):
         """Get the list of allowed operations.
@@ -62,7 +62,7 @@ class Kernel(ABC):
         return self.ansatz.get_allowed_operations()
 
     def build_kernel(
-        self, X1: np.ndarray, X2: np.ndarray, matrix: str = None
+        self, x1: np.ndarray, x2: np.ndarray, matrix: str | None = None
     ) -> np.ndarray:
         """Build a kernel.
 
@@ -72,30 +72,30 @@ class Kernel(ABC):
         :return: a single or a matrix of kernel inner products
         """
         # if you gave me only one sample
-        if len(X1.shape) == 1 and len(X2.shape) == 1:
+        if len(x1.shape) == 1 and len(x2.shape) == 1:
             if self.type in [KernelType.FIDELITY, KernelType.SWAP_TEST]:
-                return self.kappa(X1, X2)
+                return self.kappa(x1, x2)
             else:
-                return self.phi(X1) * self.phi(X2)
+                return self.phi(x1) * self.phi(x2)
 
         # if you gave me multiple samples
-        assert self.ansatz.n_features == X1.shape[1], (
+        assert self.ansatz.n_features == x1.shape[1], (
             "Number of features and X1.shape[1] do not match"
         )
-        assert self.ansatz.n_features == X2.shape[1], (
+        assert self.ansatz.n_features == x2.shape[1], (
             "Number of features and X2.shape[1] do not match"
         )
         if self.type in [KernelType.FIDELITY, KernelType.SWAP_TEST]:
             if matrix == "train":
-                return self.kernel_train_matrix(X1, X2)
+                return self.kernel_train_matrix(x1, x2)
             elif matrix == "test":
-                return self.kernel_test_matrix(X1, X2)
+                return self.kernel_test_matrix(x1, x2)
         else:
-            n = X1.shape[0]
-            m = X2.shape[0]
-            Phi1 = np.array([self.phi(x) for x in X1]).reshape((n, 1))
-            Phi2 = np.array([self.phi(x) for x in X2]).reshape((m, 1))
-            return Phi1.dot(Phi2.T)
+            n = x1.shape[0]
+            m = x2.shape[0]
+            phi1 = np.array([self.phi(x) for x in x1]).reshape((n, 1))
+            phi2 = np.array([self.phi(x) for x in x2]).reshape((m, 1))
+            return phi1.dot(phi2.T)
 
     def kernel_train_matrix(self, X1, X2):
         N = X1.shape[0]

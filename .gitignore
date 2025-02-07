@@ -24,3 +24,6 @@ src/quask/optimizer/__pycache__/*
 
 # PDM
 .pdm-build
+
+# Coverage
+.coverage

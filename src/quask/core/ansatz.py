@@ -1,6 +1,6 @@
 import numpy as np
 
-from . import Operation
+from .operation import Operation
 
 
 class Ansatz:
