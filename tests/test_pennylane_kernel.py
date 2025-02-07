@@ -2,7 +2,6 @@
 import unittest
 
 import numpy as np
-
 from quask.core import Ansatz, Kernel, KernelType
 from quask.core_implementation import PennylaneKernel
 

@@ -4,7 +4,9 @@ import numpy as np
 
 
 class Operation:
-    """Class representing a 2-qubit rotational quantum gates 
+    r"""Operation.
+    
+    Class representing a 2-qubit rotational quantum gates
     $exp(-i \theta \\sigma_1 \\otimes \\sigma_2)$.
     """
 
@@ -17,10 +19,12 @@ class Operation:
     def __init__(
         self, generator: str, wires: list[int], feature: int, bandwidth: float
     ):
-        """Operation initializer
+        """Operation initializer.
+
         :param generator: one of the elements of Operation.OPERATIONS
         :param wires: pair of integers
-        :param feature: index of the feature parameterizing the element (can be -1 for constant feature '1')
+        :param feature: index of the feature parameterizing the element 
+            (can be -1 for constant feature '1')
         :param bandwidth: bandwidth parameter in range [0,1]
         """
         self.generator: str = generator
@@ -29,7 +33,11 @@ class Operation:
         self.bandwidth: float = bandwidth
 
     def to_numpy(self):
-        """Serialize the Operation object to a numpy array format
+        """To Numpy.
+        
+        Serialize the Operation object 
+        to a numpy array format.
+
         :return: numpy array representing the operation
         """
         return np.array(
@@ -44,7 +52,11 @@ class Operation:
 
     @staticmethod
     def from_numpy(array):
-        """Deserialize the operation object given its numpy array description
+        """From Numpy array.
+        
+        Deserialize the operation object given 
+        its numpy array description.
+        
         :param array: numpy array
         :return: Operation object
         """

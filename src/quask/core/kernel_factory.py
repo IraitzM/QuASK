@@ -1,6 +1,7 @@
 from .ansatz import Ansatz
 from .kernel_type import KernelType
 
+
 class KernelFactory:
     """Kernel factory.
 
