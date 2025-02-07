@@ -1,4 +1,4 @@
-[![SQAaaS badge shields.io](https://github.com/EOSC-synergy/quask.assess.sqaaas/raw/master/.badge/status_shields.svg)](https://sqaaas.eosc-synergy.eu/#/full-assessment/report/https://raw.githubusercontent.com/eosc-synergy/quask.assess.sqaaas/master/.report/assessment_output.json)
+[![SQAaaS badge shields.io](https://github.com/EOSC-synergy/QuASK.assess.sqaaas/raw/main/.badge/status_shields.svg)](https://sqaaas.eosc-synergy.eu/#/full-assessment/report/https://raw.githubusercontent.com/eosc-synergy/QuASK.assess.sqaaas/main/.report/assessment_output.json)
 
 # Quantum Advantage Seeker with Kernels (QuASK)
 
