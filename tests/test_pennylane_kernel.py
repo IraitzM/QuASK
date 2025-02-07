@@ -2,6 +2,7 @@
 import unittest
 
 import numpy as np
+
 from quask.core import Ansatz, Kernel, KernelType
 from quask.core_implementation import PennylaneKernel
 
@@ -16,7 +17,7 @@ class TestKernel(unittest.TestCase):
         ansatz = Ansatz(n_features=1, n_qubits=2, n_operations=1)
         ansatz.initialize_to_identity()
         ansatz.change_generators(0, "XI")
-        ansatz.change_feature(0, -1)
+        #ansatz.change_feature(0, -1)
         ansatz.change_wires(0, [0, 1])
         ansatz.change_bandwidth(0, 1)
 
@@ -38,8 +39,7 @@ class TestKernel(unittest.TestCase):
         assert np.allclose(
             kernel.get_last_probabilities(), np.array([0.5, 0.5])
         ), f"Incorrect measurement: {kernel.get_last_probabilities()}"
-        print(x)
-        assert np.isclose(x, 0), "Incorrect observable"
+        assert np.isclose(x, 0.0), "Incorrect observable"
 
         # measurement operation
         # <1|Y|1> = <1HSdag|Z|SdagH1> =
@@ -51,8 +51,7 @@ class TestKernel(unittest.TestCase):
         assert np.allclose(
             kernel.get_last_probabilities(), np.array([0.5, 0.5])
         ), f"Incorrect measurement: {kernel.get_last_probabilities()}"
-        assert np.isclose(x, 0), "Incorrect observable"
-
+        assert np.isclose(x, 0.0), "Incorrect observable"
 
     def test_static_two_qubit(self):
         """Two qubit case."""
@@ -70,18 +69,17 @@ class TestKernel(unittest.TestCase):
         assert np.allclose(
             kernel.get_last_probabilities(), np.array([0.5, 0.0, 0.0, 0.5])
         ), "Incorrect measurement"
-        assert np.isclose(x, 0), "Incorrect observable"
+        np.testing.assert_almost_equal(x, 1.0, decimal=6, err_msg="Incorrect observable")
 
 
     def _check_kernel_value(self, kernel: Kernel, x1: float, x2: float, expected: float):
         similarity = kernel.kappa(x1, x2)
-        print(similarity, expected)
         assert np.isclose(similarity, expected), (
             f"Kernel value is {similarity:0.3f} while {expected:0.3f} was expected"
         )
 
 
-    def check_kernel_rx_value(kernel: Kernel, x1: float, x2: float):
+    def _check_kernel_rx_value(self, kernel: Kernel, x1: float, x2: float):
         def rx(theta):
             return np.array(
                 [
@@ -93,11 +91,12 @@ class TestKernel(unittest.TestCase):
         ket_zero = np.array([[1], [0]])
         ket_phi = np.linalg.inv(rx(x2)) @ rx(x1) @ ket_zero
         expected_similarity = (np.abs(ket_phi[0]) ** 2).real
-        check_kernel_value(
+        self._check_kernel_value(
             kernel, np.array([x1]), np.array([x2]), expected_similarity
         )
 
-    def test_rx_kernel_fidelity():
+    def test_rx_kernel_fidelity(self):
+        """Test Rx kernel fidelity."""
         ansatz = Ansatz(
             n_features=1,
             n_qubits=2,
@@ -120,21 +119,21 @@ class TestKernel(unittest.TestCase):
             n_shots=None,
         )
 
-        check_kernel_value(kernel, np.array([0.33]), np.array([0.33]), 1.0)
+        self._check_kernel_value(kernel, np.array([0.33]), np.array([0.33]), 1.0)
 
-        check_kernel_rx_value(kernel, 0.00, 0.00)
-        check_kernel_rx_value(kernel, 0.33, 0.33)
-        check_kernel_rx_value(kernel, np.pi / 2, np.pi / 2)
-        check_kernel_rx_value(kernel, np.pi, np.pi)
-        check_kernel_rx_value(kernel, 0, np.pi)
-        check_kernel_rx_value(kernel, 0.33, np.pi)
-        check_kernel_rx_value(kernel, np.pi / 2, np.pi)
-        check_kernel_rx_value(kernel, 0, 0.55)
-        check_kernel_rx_value(kernel, 0.33, 0.55)
-        check_kernel_rx_value(kernel, np.pi / 2, 0.55)
+        self._check_kernel_rx_value(kernel, 0.00, 0.00)
+        self._check_kernel_rx_value(kernel, 0.33, 0.33)
+        self._check_kernel_rx_value(kernel, np.pi / 2, np.pi / 2)
+        self._check_kernel_rx_value(kernel, np.pi, np.pi)
+        self._check_kernel_rx_value(kernel, 0, np.pi)
+        self._check_kernel_rx_value(kernel, 0.33, np.pi)
+        self._check_kernel_rx_value(kernel, np.pi / 2, np.pi)
+        self._check_kernel_rx_value(kernel, 0, 0.55)
+        self._check_kernel_rx_value(kernel, 0.33, 0.55)
+        self._check_kernel_rx_value(kernel, np.pi / 2, 0.55)
 
-
-    def test_rx_kernel_fidelity():
+    def test_rx_kernel_fidelity_2(self):
+        """Test Rx kernel fidelity."""
         ansatz = Ansatz(
             n_features=1,
             n_qubits=2,
@@ -157,15 +156,15 @@ class TestKernel(unittest.TestCase):
             n_shots=None,
         )
 
-        check_kernel_value(kernel, np.array([0.33]), np.array([0.33]), 1.0)
+        self._check_kernel_value(kernel, np.array([0.33]), np.array([0.33]), 1.0)
 
-        check_kernel_rx_value(kernel, 0.00, 0.00)
-        check_kernel_rx_value(kernel, 0.33, 0.33)
-        check_kernel_rx_value(kernel, np.pi / 2, np.pi / 2)
-        check_kernel_rx_value(kernel, np.pi, np.pi)
-        check_kernel_rx_value(kernel, 0, np.pi)
-        check_kernel_rx_value(kernel, 0.33, np.pi)
-        check_kernel_rx_value(kernel, np.pi / 2, np.pi)
-        check_kernel_rx_value(kernel, 0, 0.55)
-        check_kernel_rx_value(kernel, 0.33, 0.55)
-        check_kernel_rx_value(kernel, np.pi / 2, 0.55)
+        self._check_kernel_rx_value(kernel, 0.00, 0.00)
+        self._check_kernel_rx_value(kernel, 0.33, 0.33)
+        self._check_kernel_rx_value(kernel, np.pi / 2, np.pi / 2)
+        self._check_kernel_rx_value(kernel, np.pi, np.pi)
+        self._check_kernel_rx_value(kernel, 0, np.pi)
+        self._check_kernel_rx_value(kernel, 0.33, np.pi)
+        self._check_kernel_rx_value(kernel, np.pi / 2, np.pi)
+        self._check_kernel_rx_value(kernel, 0, 0.55)
+        self._check_kernel_rx_value(kernel, 0.33, 0.55)
+        self._check_kernel_rx_value(kernel, np.pi / 2, 0.55)

@@ -83,7 +83,8 @@ class Ansatz:
         self.operation_list[operation_index].generator = new_generator
 
     def change_feature(self, operation_index: int, new_feature: int):
-        """Overwrite the operation at the given index with a new feature
+        """Overwrite the operation at the given index with a new feature.
+
         :param operation_index: index of the operation
         :param new_feature: feature parameterizing the operation
         :return: None
@@ -97,7 +98,8 @@ class Ansatz:
         self.operation_list[operation_index].feature = new_feature
 
     def change_wires(self, operation_index: int, new_wires: list[int]):
-        """Overwrite the operation at the given index with a new pair of wires
+        """Overwrite the operation at the given index with a new pair of wires.
+
         :param operation_index: index of the operation
         :param new_wires: wires on which the operation is applied
         :return: None
@@ -119,8 +121,10 @@ class Ansatz:
         )
         self.operation_list[operation_index].wires = new_wires
 
-    def get_allowed_operations(self):
-        """Get the list of allowed operation for the ansatz, either only the PAULI_GENERATORS or any operation including measurements
+    def get_allowed_operations(self) -> list:
+        """Get the list of allowed operation for the ansatz, either
+        only the PAULI_GENERATORS or any operation including measurements.
+
         :return: list of allowed operations
         """
         if self.allow_midcircuit_measurement:
@@ -129,7 +133,8 @@ class Ansatz:
             return Operation.PAULI_GENERATORS
 
     def initialize_to_identity(self):
-        """Initialize the ansatz to the identity circuit
+        """Initialize the ansatz to the identity circuit.
+
         :return: None
         """
         self.operation_list = [None] * self.n_operations
@@ -139,7 +144,8 @@ class Ansatz:
             )
 
     def initialize_to_random_circuit(self):
-        """Initialize the ansatz to a random circuit
+        """Initialize the ansatz to a random circuit.
+
         :return: None
         """
         for i in range(self.n_operations):
@@ -154,7 +160,7 @@ class Ansatz:
             )
 
     def initialize_to_known_ansatz(self, ansatz):
-        """Initialize the ansatz form an already given element
+        """Initialize the ansatz form an already given element.
 
         :param ansatz: Given ansatz
         :return: None
@@ -167,7 +173,8 @@ class Ansatz:
             )
 
     def to_numpy(self):
-        """Serialize the ansatz to a numpy array
+        """Serialize the ansatz to a numpy array.
+
         :return: numpy array
         """
         return np.array([op.to_numpy() for op in self.operation_list]).ravel()
@@ -184,10 +191,11 @@ class Ansatz:
         """Deserialize the ansatz from a numpy array.
 
         :param array: numpy array
-        :param n_features: number of feature that can be used to parametrize the operation
+        :param n_features: number of feature that can be used to parametrize 
+            the operation
         :param n_qubits: number of qubits of the circuit
         :param n_operations: number of operations
-        :param allow_midcircuit_measurement: True if mid-circuit measurement are allowed
+        :param allow_midcircuit_measurement: True if mid-circuit measurement allowed
         :return: Ansatz deserialized
         """
         ans = Ansatz(
@@ -211,11 +219,9 @@ class Ansatz:
         return ans
 
     def __str__(self):
-        """Gets the function string.
-
-        :return: str: _description_
-        """
+        """__str__."""
         return str(self.operation_list)
 
     def __repr__(self):
+        """__repr__"""
         return self.__str__()
